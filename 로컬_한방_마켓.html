@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자연을 달이다 - 맞춤형 로컬 건강 마켓</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fcf9f2;
+            color: #333333;
+            line-height: 1.6;
+            font-size: 18px; 
+        }
+
+        /* 헤더 */
+        header {
+            background-color: #ffffff;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #4a7c59;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #4a7c59;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        header nav {
+            display: flex;
+            align-items: center;
+        }
+
+        header nav a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 22px;
+            font-weight: 700;
+            margin-left: 30px;
+            cursor: pointer;
+        }
+        
+        .cart-badge {
+            background-color: #f57f17;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 10px;
+            font-size: 16px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            background-color: #e8f5e9;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            color: #2e4d37;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* 상점 탭 (원물 vs 가공품) */
+        .store-tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #ffffff;
+            padding: 20px 20px 0 20px;
+            gap: 20px;
+        }
+
+        .store-tab {
+            background-color: #f5f5f5;
+            color: #555;
+            font-size: 24px;
+            font-weight: 900;
+            padding: 15px 40px;
+            border: 2px solid #ddd;
+            border-bottom: none;
+            border-radius: 15px 15px 0 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .store-tab.active {
+            background-color: #4a7c59;
+            color: white;
+            border-color: #4a7c59;
+        }
+
+        /* 필터 버튼 */
+        .filters {
+            text-align: center;
+            padding: 20px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .filter-btn {
+            background-color: #ffffff;
+            border: 2px solid #4a7c59;
+            color: #4a7c59;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: #4a7c59;
+            color: white;
+        }
+
+        /* 상품 목록 */
+        .recommendation {
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            width: 300px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .badge-brand {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #333;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .badge-kit {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #e65100;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #4a7c59;
+            box-shadow: 0 8px 16px rgba(74,124,89,0.2);
+        }
+
+        .card-img {
+            height: 180px;
+            background-color: #f5f5f5;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover .card-img img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .symptom-tag {
+            display: inline-block;
+            background-color: #ffe0b2;
+            color: #e65100;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .card h4 {
+            font-size: 22px;
+            margin: 10px 0;
+            color: #2e4d37;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #666666;
+            margin-bottom: 20px;
+            height: 48px;
+            overflow: hidden;
+        }
+
+        .btn-buy {
+            display: block;
+            background-color: #4a7c59;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .card:hover .btn-buy {
+            background-color: #33691e;
+        }
+
+        /* 모달 (상품 상세 팝업) */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10;
+        }
+
+        .modal-header {
+            background-color: #e8f5e9;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 32px;
+            color: #2e4d37;
+            margin: 0 0 10px 0;
+        }
+
+        .modal-price {
+            font-size: 24px;
+            font-weight: 900;
+            color: #e65100;
+            margin-bottom: 15px;
+        }
+
+        .modal-desc {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .modal-extra-info {
+            background-color: #f1f8e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 17px;
+            border-left: 5px solid #4a7c59;
+        }
+
+        .modal-extra-info p {
+            margin: 8px 0;
+            color: #333;
+        }
+        
+        .farmer-info {
+            background-color: #fff3e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 17px;
+            border-left: 5px solid #f57f17;
+        }
+        
+        .farmer-info p {
+            margin: 8px 0;
+            color: #333;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quantity-btn {
+            background-color: #e0e0e0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #ccc;
+            margin: 0 10px;
+            border-radius: 8px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-cart, .btn-purchase {
+            flex: 1;
+            padding: 15px;
+            font-size: 22px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-cart {
+            background-color: #ffffff;
+            border: 2px solid #4a7c59;
+            color: #4a7c59;
+        }
+
+        .btn-purchase {
+            background-color: #4a7c59;
+            color: white;
+        }
+
+        /* 장바구니 및 구매 페이지 공통 */
+        .page-section {
+            display: none;
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .page-section h2 {
+            font-size: 32px;
+            color: #2e4d37;
+            border-bottom: 2px solid #4a7c59;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .cart-item { display: flex; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0; gap: 20px; }
+        .cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; }
+        .cart-item-info { flex: 1; }
+        .cart-item-info h4 { font-size: 22px; margin: 0 0 10px 0; color: #333; }
+        .cart-item-info p { margin: 0; font-size: 18px; color: #666; }
+        .cart-item-remove { background: #ff5252; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .empty-cart-msg { text-align: center; font-size: 24px; color: #777; padding: 50px 0; }
+
+        .order-summary { background-color: #f1f8e9; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .order-summary-item { font-size: 20px; margin: 10px 0; display: flex; justify-content: space-between; color: #555; }
+        .order-total { font-size: 28px !important; font-weight: 900; color: #e65100; border-top: 1px solid #ccc; padding-top: 15px; margin-top: 15px !important; display: flex; justify-content: space-between; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 22px; font-weight: bold; margin-bottom: 10px; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 15px; font-size: 20px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        .btn-full-width { width: 100%; background-color: #f57f17; color: white; font-size: 28px; font-weight: bold; padding: 20px; border: none; border-radius: 10px; cursor: pointer; margin-top: 20px; }
+
+        #success-section { text-align: center; padding: 60px; }
+        #success-section h2 { font-size: 42px; color: #4a7c59; margin-bottom: 20px; border: none; }
+        #success-section p { font-size: 24px; color: #555; margin-bottom: 40px; }
+        .btn-home { background-color: #4a7c59; color: white; font-size: 24px; font-weight: bold; padding: 15px 40px; border: none; border-radius: 8px; cursor: pointer; }
+
+        #toast { visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 8px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 20px; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    
+        /* AI 맞춤 추천 섹션 */
+        .ai-section {
+            background-color: #f1f8e9;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        .ai-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .ai-container h3 {
+            color: #2e4d37;
+            font-size: 26px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .ai-input-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .ai-input-wrapper textarea {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #a5d6a7;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+        .ai-input-wrapper textarea:focus {
+            outline: none;
+            border-color: #4a7c59;
+        }
+        .ai-btn {
+            background-color: #4a7c59;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 0 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .ai-btn:hover {
+            background-color: #33691e;
+        }
+        .ai-result {
+            display: none;
+            text-align: left;
+            background-color: #f9fbe7;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #8bc34a;
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .ai-result h4 {
+            color: #33691e;
+            font-size: 20px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .ai-result .drug-info {
+            background-color: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ef5350;
+        }
+        .ai-result .drug-info p { margin: 5px 0; color: #b71c1c; font-weight: 500;}
+        .ai-result .recommend-item {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+        }
+        .ai-result .recommend-item strong {
+            color: #d84315;
+            font-size: 18px;
+        }
+
+    
+        /* 증상별 아이콘 퀵 메뉴 */
+        .symptom-icons-container {
+            padding: 30px 20px;
+            background-color: #ffffff;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .symptom-icons-container h3 {
+            color: #2e4d37;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        .symptom-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .symptom-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 100px;
+        }
+        .symptom-item:hover {
+            transform: translateY(-5px);
+        }
+        .symptom-icon {
+            width: 70px;
+            height: 70px;
+            background-color: #f1f8e9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            border: 2px solid #c8e6c9;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        .symptom-item.active .symptom-icon {
+            background-color: #4a7c59;
+            border-color: #4a7c59;
+            color: white;
+            box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
+        }
+        .symptom-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #555;
+        }
+        .symptom-item.active .symptom-name {
+            color: #4a7c59;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 onclick="goHome()">🌿 자연을 달이다</h1>
+        <nav>
+            <a onclick="goHome()">마켓 홈</a>
+            <a onclick="showCart()">장바구니 <span class="cart-badge" id="cart-badge-count">0</span></a>
+        </nav>
+    </header>
+
+    <!-- 메인 상점 페이지 -->
+    <div id="main-section">
+        <section class="hero">
+            <h2>"불편한 증상에 맞는 맞춤 식품을 찾아보세요"</h2>
+            <p>한약학 전공자가 엄선한 로컬 농산물과 <br>한방차 키트, 제휴 밀키트까지 믿을 수 있는 건강식을 제안합니다.</p>
+        </section>
+
+        
+        <!-- AI 맞춤 추천 섹션 -->
+        <section class="ai-section">
+            <div class="ai-container">
+                <h3>🤖 AI 한방 섭생 1:1 맞춤 추천</h3>
+                <p style="color: #666; margin-bottom: 20px;">현재의 건강 상태, 고민, 복용 중인 약을 편하게 이야기해주세요. 한약학 기반 AI가 분석해드립니다.</p>
+                <div class="ai-input-wrapper">
+                    <textarea id="ai-prompt" placeholder="현재 겪고 있는 증상, 복용 중인 약, 평소 식습관 등을 편하게 입력해주세요."></textarea>
+                    <button class="ai-btn" onclick="analyzePrompt()">분석<br>하기</button>
+                </div>
+                
+                <div id="ai-result" class="ai-result">
+                    <h4>🩺 AI 한방 약선 전문가의 1:1 맞춤 컨설팅 결과</h4>
+                    
+                    <div class="drug-info">
+                        <p><strong>💊 복용 중인 약물 분석 및 주의사항</strong></p>
+                        <p>- <strong>이소티논(여드름 치료제):</strong> 피지 조절 작용으로 인해 체내 진액(수분)을 마르게 합니다. 현재 겪고 계신 비염은 코 점막이 바싹 마르면서 발생하는 '건조성 비염'일 확률이 높으며, 간 대사에 부담을 주어 고3 특유의 무력감을 심화시킬 수 있습니다.</p>
+                        <p>- <strong>탁센(소염진통제):</strong> 강력한 진통 효과가 있지만 위장 점막을 자극합니다.</p>
+                        <p>👉 <strong>전문가의 조언:</strong> 두 약물 모두 위와 간에 부담을 주므로 맵고 짠 자극적인 음식은 반드시 피하셔야 합니다. 약은 반드시 식후 즉시 복용하시고, 추천해 드리는 한방차는 약 복용 1~2시간 후에 드시는 것이 좋습니다.</p>
+                    </div>
+                    
+                    <h5 style="color:#2e4d37; font-size:18px; margin-top:20px;">🛍️ 맞춤 한방 섭생 추천 상품</h5>
+                    
+                    <div class="recommend-item">
+                        <strong>1. 🍵 여름철 진액 보충, 생맥산 끓이기 키트 (맥문동+인삼+오미자)</strong>
+                        <p>- <strong>왜 추천하나요?</strong> 이소티논으로 인해 마른 호흡기와 점막에 수분(진액)을 흠뻑 공급해주는 맥문동과 오미자가 핵심입니다. 또한 인삼이 고3 수험생의 뚝 떨어진 기력을 부드럽게 끌어올려 줍니다.</p>
+                        <p>- <strong>기대 효과:</strong> 코 점막 보습, 만성 피로 회복, 집중력 향상</p>
+                    </div>
+                    
+                    <div class="recommend-item">
+                        <strong>2. 🤧 코가 뻥 뚫리는 작두콩 수세미차 세트</strong>
+                        <p>- <strong>왜 추천하나요?</strong> 작두콩의 히스티딘 성분과 수세미의 천연 소염 성분이 만나 비염으로 인한 콧물, 코막힘, 염증을 가라앉힙니다. 텀블러에 우려 학교에서 물처럼 드시기 가장 좋습니다.</p>
+                        <p>- <strong>기대 효과:</strong> 비염 증상 완화, 호흡기 면역력 증진</p>
+                    </div>
+
+                    <div class="recommend-item">
+                        <strong>3. 🍐 하동 배즙 & 영주 약도라지 (길경)</strong>
+                        <p>- <strong>왜 추천하나요?</strong> 탁센(소염진통제)으로 지친 위장에 무리를 주지 않으면서 호흡기를 보호하는 최고의 꿀조합입니다. 도라지의 사포닌이 기관지를 튼튼하게 하고 배의 펙틴이 열을 내려줍니다.</p>
+                        <p>- <strong>꿀조합 팁:</strong> 도라지를 달일 때 하동 배즙을 베이스로 넣고 끓이시면 쓴맛이 잡히고 기관지 보호 효과(윤폐 작용)가 2배로 상승합니다.</p>
+                    </div>
+                    
+                    <h5 style="color:#2e4d37; font-size:18px; margin-top:25px;">🥗 같이 먹으면 좋은 음식 (음식 궁합)</h5>
+                    <ul style="color:#555; font-size:16px; line-height:1.6;">
+                        <li><strong>따뜻한 성질의 뿌리채소:</strong> 연근, 우엉, 당근 등 뿌리채소를 조림이나 차로 드세요. 위장을 편안하게 하고 면역력을 높여줍니다.</li>
+                        <li><strong>오리고기 + 부추:</strong> 무력감이 심할 때는 소화가 잘 되는 단백질이 필요합니다. 오리고기는 찬 성질로 체내 염증을 낮춰주며, 따뜻한 성질의 부추와 함께 먹으면 완벽한 균형을 이룹니다.</li>
+                        <li><strong>검은콩(서리태) 밥:</strong> 신장 기운을 보충해 주어 체력 방전을 막아주고 약물로 지친 간 해독에 도움을 줍니다.</li>
+                    </ul>
+
+                    <h5 style="color:#2e4d37; font-size:18px; margin-top:25px;">🏃‍♂️ 일상 건강 관리 팁 (Lifestyle Routine)</h5>
+                    <div style="background-color:#fff3e0; padding:15px; border-radius:8px; border-left:5px solid #ff9800; color:#333;">
+                        <p>1. <strong>수분 섭취의 골든타임:</strong> 이소티논 복용 중이므로 하루 2리터 이상의 미지근한 물 섭취가 필수입니다. 아침 공복에 마시는 따뜻한 물 한 잔이 굳어있는 위장과 코 점막을 깨워줍니다.</p>
+                        <p>2. <strong>실내 습도 유지:</strong> 고3 교실이나 독서실은 매우 건조합니다. 미니 가습기를 꼭 사용하시고, 젖은 수건을 걸어두어 코 점막이 마르지 않게 보호하세요.</p>
+                        <p>3. <strong>수면의 질 확보:</strong> 무력감을 이기려면 밤 11시 ~ 새벽 2시 사이에는 반드시 수면을 취해야 간이 회복됩니다. 주무시기 30분 전 따뜻한 팩(뜸팩)을 아랫배에 올리고 주무시면 깊은 수면에 큰 도움이 됩니다.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 상점 탭 -->
+        <div class="store-tabs">
+            <button class="store-tab active" onclick="switchStore('raw', this)">🌾 로컬 원물 농산물</button>
+            <button class="store-tab" onclick="switchStore('processed', this)">🥣 한방차 키트 & 제휴 밀키트</button>
+        </div>
+
+        
+        <section class="symptom-icons-container" id="products-section">
+            <h3>🩺 나의 증상 및 고민을 선택해보세요</h3>
+            <div class="symptom-grid">
+                <div class="symptom-item active" onclick="filterBySymptom('all', this)">
+                    <div class="symptom-icon">🌟</div>
+                    <span class="symptom-name">전체보기</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('소화', this)">
+                    <div class="symptom-icon">🤢</div>
+                    <span class="symptom-name">소화/위장</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('호흡기', this)">
+                    <div class="symptom-icon">🤧</div>
+                    <span class="symptom-name">호흡기/비염</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('피로', this)">
+                    <div class="symptom-icon">🔋</div>
+                    <span class="symptom-name">기력/만성피로</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('순환', this)">
+                    <div class="symptom-icon">🥶</div>
+                    <span class="symptom-name">수족냉증/순환</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('관절', this)">
+                    <div class="symptom-icon">🦴</div>
+                    <span class="symptom-name">뼈/관절</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('안정', this)">
+                    <div class="symptom-icon">😴</div>
+                    <span class="symptom-name">불면/스트레스</span>
+                </div>
+                <div class="symptom-item" onclick="filterBySymptom('피부', this)">
+                    <div class="symptom-icon">✨</div>
+                    <span class="symptom-name">피부/항산화</span>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="recommendation">
+            <div class="card-container" id="product-list">
+                <!-- 자바스크립트로 상품 목록이 생성됩니다 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- 장바구니 페이지 -->
+    <div id="cart-section" class="page-section">
+        <h2>장바구니</h2>
+        <div id="cart-items-container"></div>
+        <div style="margin-top: 30px; border-top: 2px solid #ccc; padding-top: 20px;">
+            <p style="font-size: 26px; font-weight: bold; text-align: right;">총 장바구니 금액: <span id="cart-total-price" style="color:#e65100;">0</span>원</p>
+        </div>
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button class="btn-full-width" style="background-color: #4a7c59;" onclick="goHome()">계속 쇼핑하기</button>
+            <button class="btn-full-width" id="btn-checkout-cart" onclick="checkoutFromCart()">장바구니 상품 결제하기</button>
+        </div>
+    </div>
+
+    <!-- 구매(체크아웃) 페이지 -->
+    <div id="checkout-section" class="page-section">
+        <h2>주문 및 결제</h2>
+        
+        <div class="order-summary">
+            <div id="checkout-items-list"></div>
+            <div class="order-total">
+                <span>총 결제 금액:</span> 
+                <span><span id="checkout-total-price">0</span>원</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="buyer-name">받으시는 분 성함</label>
+            <input type="text" id="buyer-name" placeholder="홍길동">
+        </div>
+        <div class="form-group">
+            <label for="buyer-phone">연락처</label>
+            <input type="tel" id="buyer-phone" placeholder="010-0000-0000">
+        </div>
+        <div class="form-group">
+            <label for="buyer-address">배송 받으실 주소</label>
+            <input type="text" id="buyer-address" placeholder="예: 서울특별시 강남구...">
+        </div>
+        <div class="form-group">
+            <label for="payment-method">결제 수단</label>
+            <select id="payment-method">
+                <option value="card">신용카드 / 체크카드</option>
+                <option value="bank">무통장 입금</option>
+                <option value="phone">휴대폰 결제</option>
+            </select>
+        </div>
+
+        <button class="btn-full-width" onclick="processPayment()">결제하기</button>
+    </div>
+
+    <!-- 결제 완료 페이지 -->
+    <div id="success-section" class="page-section">
+        <h2>🎉 주문이 완료되었습니다!</h2>
+        <p>어르신의 건강을 위한 소중한 로컬 농산물과 건강식이 곧 배송될 예정입니다.<br>안전하게 포장하여 보내드리겠습니다.</p>
+        <button class="btn-home" onclick="goHome()">메인 화면으로 돌아가기</button>
+    </div>
+
+    <!-- 상품 상세 모달 -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header" id="modal-img-container">
+                <img src="" id="modal-img" alt="상품 이미지">
+            </div>
+            <div class="modal-body">
+                <div class="symptom-tag" id="modal-tag">#소화불량</div>
+                <h3 class="modal-title" id="modal-title">상품명</h3>
+                <div class="modal-price" id="modal-price">0원</div>
+                <p class="modal-desc" id="modal-desc">상세 설명</p>
+                
+                <div class="farmer-info">
+                    <p><strong><span id="modal-farmer-icon">🧑‍🌾</span> <span id="modal-farmer-label">생산자</span>:</strong> <span id="modal-farmer"></span></p>
+                    <p><strong>📍 <span id="modal-location-label">산지 위치</span>:</strong> <span id="modal-location"></span></p>
+                </div>
+
+                <div class="modal-extra-info">
+                    <p><strong>🧪 주요 성분:</strong> <span id="modal-ingredient"></span></p>
+                    <p><strong>🤝 <span id="modal-pairing-label">음식궁합</span>:</strong> <span id="modal-pairing"></span></p>
+                </div>
+                
+                <div class="quantity-control">
+                    <span style="font-size:18px; margin-right:15px; font-weight:bold;">수량:</span>
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                    <input type="text" class="quantity-input" id="modal-quantity" value="1" readonly>
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                </div>
+                
+                <div class="modal-actions">
+                    <button class="btn-cart" onclick="addToCart()">장바구니 담기</button>
+                    <button class="btn-purchase" onclick="buyNowImmediate()">바로 구매하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div id="toast">장바구니에 담겼습니다!</div>
+
+    <script>
+        const getImgUrl = (keyword) => `https://tse2.mm.bing.net/th?q=${encodeURIComponent(keyword)}&w=400&h=300&c=7`;
+
+        const products = [
+            // 원물 농산물 (type: 'raw') - 기존 20개 동일
+            { id: 1, type: "raw", category: "소화", name: "안동 유기농 참마 (산약)", tag: "소화불량 #위장건강", imgUrl: getImgUrl("안동 참마"), price: 35000, desc: "끈적한 뮤신 성분이 위벽을 보호해주어 속쓰림과 소화불량에 탁월한 안동 지역의 참마입니다.", ingredient: "뮤신(Mucin), 디오스게닌", pairing: "오리고기 (소화 흡수 극대화), 우유", farmer: "김태영 농부 (햇살가득 안동농장)", location: "경상북도 안동시 풍산읍" },
+            { id: 2, type: "raw", category: "호흡기", name: "청양 볶은 맥문동", tag: "마른기침 #호흡기", imgUrl: getImgUrl("볶은 맥문동 차"), price: 28000, desc: "동의보감에 진액을 보충한다고 기록된 맥문동. 목이 자주 마르거나 잔기침이 날 때 구수하게 차로 드세요.", ingredient: "오피오포고닌 (사포닌계)", pairing: "인삼, 오미자 (생맥산 조합으로 기력과 진액 보충)", farmer: "이수진 농부 (청정 칠갑산 팜)", location: "충청남도 청양군 대치면" },
+            { id: 3, type: "raw", category: "피로", name: "금산 유기농 수삼 세트", tag: "만성피로 #기력회복", imgUrl: getImgUrl("금산 수삼 인삼"), price: 85000, desc: "피로 회복의 대명사! 금산에서 맑은 물과 흙으로 키운 유기농 인삼으로 떨어진 기력을 든든하게 채워줍니다.", ingredient: "진세노사이드 (인삼 사포닌)", pairing: "닭고기(삼계탕), 꿀, 대추", farmer: "박민호 농부 (천년뿌리 금산농원)", location: "충청남도 금산군 남일면" },
+            { id: 4, type: "raw", category: "순환", name: "강화 사자발쑥 (애엽)", tag: "수족냉증 #여성건강", imgUrl: getImgUrl("강화 사자발쑥"), price: 15000, desc: "손발이 차고 아랫배가 냉할 때, 몸을 따뜻하게 데워주는 성질을 가진 강화 특산물 사자발쑥입니다.", ingredient: "유파틸린, 치네올", pairing: "생강, 대추 (따뜻한 성질을 배가시켜 혈액순환 촉진)", farmer: "최영희 농부 (바다바람 강화농장)", location: "인천광역시 강화군 길상면" },
+            { id: 5, type: "raw", category: "안정", name: "청도 볶은 결명자", tag: "눈피로 #안구건조", imgUrl: getImgUrl("결명자차"), price: 12000, desc: "스마트폰과 TV로 피로해진 눈을 맑게 해주는 청도산 결명자. 간의 열을 내려 눈을 편안하게 합니다.", ingredient: "카로틴, 안트라퀴논 유도체", pairing: "구기자, 감국 (눈 건강과 시력 보호에 시너지)", farmer: "정현우 농부 (맑은눈 청도농원)", location: "경상북도 청도군 각남면" },
+            { id: 6, type: "raw", category: "안정", name: "경산 무농약 대추", tag: "불면증 #심신안정", imgUrl: getImgUrl("경산 대추 건대추"), price: 22000, desc: "밤에 잠이 잘 오지 않을 때, 마음을 편안하게 이완시켜주는 달달한 경산 대추차 한 잔 어떠세요?", ingredient: "베툴린산, 대추 사포닌", pairing: "생강, 감초 (위장을 편안하게 보호하고 흡수율 증가)", farmer: "강석진 농부 (달큰 경산대추원)", location: "경상북도 경산시 자인면" },
+            { id: 7, type: "raw", category: "순환", name: "안동 늙은호박 즙", tag: "붓기제거 #이뇨작용", imgUrl: getImgUrl("늙은호박"), price: 45000, desc: "아침마다 몸이 무겁고 붓는다면, 체내 노폐물 배출을 돕는 안동 늙은 호박을 푹 달여낸 즙을 추천합니다.", ingredient: "베타카로틴, 칼륨, 펙틴", pairing: "팥 (강력한 이뇨 작용으로 노폐물 및 붓기 제거 시너지)", farmer: "윤정수 농부 (황금들녘 농장)", location: "경상북도 안동시 임하면" },
+            { id: 8, type: "raw", category: "순환", name: "홍천 우슬뿌리", tag: "관절건강 #무릎보호", imgUrl: getImgUrl("우슬뿌리 건조"), price: 30000, desc: "소의 무릎을 닮았다 하여 붙여진 이름 '우슬'. 관절과 연골을 튼튼하게 하는데 도움을 주는 홍천 특산물입니다.", ingredient: "엑디스테론, 사포닌", pairing: "두충, 모과 (관절 연골 및 근육 인대 강화)", farmer: "장미란 농부 (튼튼뿌리 홍천농원)", location: "강원도 홍천군 남면" },
+            { id: 9, type: "raw", category: "호흡기", name: "영주 도라지 (길경)", tag: "기관지 #가래해소", imgUrl: getImgUrl("약도라지 건조"), price: 32000, desc: "사포닌이 풍부하여 가래를 삭이고 기관지 건강을 지켜주는 영주산 3년근 이상 약도라지입니다.", ingredient: "플라티코딘 (도라지 사포닌)", pairing: "배, 꿀, 생강 (호흡기 염증 완화 및 기관지 보호 극대화)", farmer: "한동일 농부 (소백산 정기농장)", location: "경상북도 영주시 풍기읍" },
+            { id: 10, type: "raw", category: "순환", name: "남해 흑마늘 진액", tag: "혈액순환 #활력", imgUrl: getImgUrl("흑마늘"), price: 60000, desc: "매운맛은 줄이고 항산화 성분은 높인 남해 흑마늘! 막힌 혈행을 개선하고 활력을 줍니다.", ingredient: "S-알릴시스테인 (SAC)", pairing: "돼지고기 (알리신이 비타민 B1 흡수율을 10배 이상 증가시킴)", farmer: "조은숙 농부 (해풍맞은 남해농원)", location: "경상남도 남해군 남면" },
+            { id: 11, type: "raw", category: "피로", name: "문경 오미자 청", tag: "면역력 #갈증해소", imgUrl: getImgUrl("오미자 청 건오미자"), price: 25000, desc: "다섯 가지 맛을 내는 오미자는 오장육부에 모두 좋은 약재입니다. 면역력이 떨어졌을 때 상큼하게 드세요.", ingredient: "쉬잔드린, 고미신", pairing: "인삼, 맥문동 (폐를 윤택하게 하고 땀을 멎게 함)", farmer: "임철수 농부 (다섯맛 문경농장)", location: "경상북도 문경시 동로면" },
+            { id: 12, type: "raw", category: "피로", name: "구례 산수유 엑기스", tag: "간피로 #신장건강", imgUrl: getImgUrl("건산수유 열매"), price: 55000, desc: "간과 신장을 보호하여 피로를 근본적으로 풀어주는 붉은 보석, 구례 산수유를 진하게 내렸습니다.", ingredient: "로가닌, 코르닌", pairing: "복분자, 참마 (신장 기능 강화 및 하체 활력 증진)", farmer: "송지원 농부 (붉은노을 구례농원)", location: "전라남도 구례군 산동면" },
+            { id: 13, type: "raw", category: "안정", name: "제주 무농약 진귤 껍질 (진피)", tag: "스트레스 #소화촉진", imgUrl: getImgUrl("말린 진피 귤껍질"), price: 18000, desc: "가슴이 답답하고 스트레스 받을 때 뭉친 기운을 풀어주는 진피(귤껍질) 차로 상쾌함을 느껴보세요.", ingredient: "헤스페리딘 (비타민 P)", pairing: "생강, 대추 (소화를 촉진하고 몸을 따뜻하게 하여 감기 예방)", farmer: "고영민 농부 (제주 솔바람 감귤농장)", location: "제주특별자치도 서귀포시 남원읍" },
+            { id: 14, type: "raw", category: "안정", name: "고흥 유자 꿀차", tag: "피부건조 #비타민C", imgUrl: getImgUrl("고흥 유자"), price: 20000, desc: "레몬보다 비타민C가 풍부한 고흥 유자! 푸석푸석해진 피부에 생기를 불어넣고 감기를 예방합니다.", ingredient: "리모넨, 비타민 C", pairing: "꿀, 모과 (비타민 흡수를 돕고 호흡기를 윤택하게 함)", farmer: "백종수 농부 (향긋한 고흥농원)", location: "전라남도 고흥군 풍양면" },
+            { id: 15, type: "raw", category: "순환", name: "영천 참당귀", tag: "빈혈예방 #조혈작용", imgUrl: getImgUrl("당귀 뿌리 한약재"), price: 26000, desc: "혈액을 생성하고 순환을 돕는 대표적인 약재 당귀. 어지럼증이나 빈혈이 있으신 분들께 적극 추천합니다.", ingredient: "데커신 (Deccursin)", pairing: "천궁, 백작약, 숙지황 (혈액순환과 조혈작용을 돕는 사물탕 조합)", farmer: "홍길순 농부 (보약마을 영천농장)", location: "경상북도 영천시 신녕면" },
+            { id: 16, type: "raw", category: "순환", name: "해남 두충나무 껍질", tag: "뼈건강 #근육통", imgUrl: getImgUrl("두충나무 껍질 건조"), price: 24000, desc: "허리와 무릎이 시큰거릴 때 뼈와 근육을 튼튼하게 강화해주는 해남 두충나무 차를 드셔보세요.", ingredient: "피노레시놀, 구타페르카", pairing: "우슬, 골담초 (뼈와 관절을 튼튼하게 하는 최고 궁합)", farmer: "유재석 농부 (땅끝마을 두충농원)", location: "전라남도 해남군 송지면" },
+            { id: 17, type: "raw", category: "소화", name: "평창 쓴메밀 차", tag: "변비해소 #독소배출", imgUrl: getImgUrl("쓴메밀차"), price: 16000, desc: "장 운동을 활발하게 하여 숙변 제거에 도움을 주고 열을 내려주는 평창 고랭지 쓴메밀입니다.", ingredient: "루틴 (Rutin, 일반 메밀의 70배)", pairing: "무 (메밀의 찬 성질을 보완하고 소화효소가 독소 배출을 돔)", farmer: "권태호 농부 (고랭지 평창메밀밭)", location: "강원도 평창군 봉평면" },
+            { id: 18, type: "raw", category: "피로", name: "서산 서리태 (흑두)", tag: "탈모예방 #단백질", imgUrl: getImgUrl("서리태 검은콩"), price: 22000, desc: "신장 기운을 보충하여 모발을 검고 윤기나게 도와주는 서산의 속이 파란 검은콩(서리태)입니다.", ingredient: "안토시아닌, 이소플라본", pairing: "검은깨, 호두, 다시마 (두피 건강, 탈모 예방 시너지)", farmer: "신동엽 농부 (갯벌바람 서산농장)", location: "충청남도 서산시 부석면" },
+            { id: 19, type: "raw", category: "호흡기", name: "하동 배즙", tag: "호흡기보호 #해열", imgUrl: getImgUrl("배즙 과일배"), price: 35000, desc: "폐의 열을 내리고 건조함을 막아주는 달콤한 하동 배 100% 원액입니다. 환절기 필수품!", ingredient: "루테올린, 펙틴", pairing: "도라지, 꿀 (기침 해소와 윤폐 작용을 극대화)", farmer: "강호동 농부 (섬진강 하동배농원)", location: "경상남도 하동군 하동읍" },
+            { id: 20, type: "raw", category: "피로", name: "정선 특품 황기", tag: "체력저하 #식은땀", imgUrl: getImgUrl("황기 한약재"), price: 38000, desc: "기운이 없어 땀을 많이 흘릴 때, 기표를 튼튼하게 하여 땀을 멎게 하고 에너지를 채워주는 정선 황기입니다.", ingredient: "아스트라갈로사이드, 칼리코신", pairing: "닭고기, 인삼 (삼계탕 조합으로 여름철 기력 회복과 면역력 증진)", farmer: "김병만 농부 (아리아리 정선약초)", location: "강원도 정선군 임계면" },
+            
+            
+            // 추가된 로컬 농산물
+            { id: 41, type: "raw", category: "피부", name: "제주 유기농 알로에 베라 잎", tag: "피부진정 #보습", imgUrl: getImgUrl("알로에 생잎"), price: 15000, desc: "청정 제주에서 자란 유기농 알로에. 섭취 시 장 건강에 좋고 즙을 내어 피부 진정팩으로도 쓸 수 있습니다.", ingredient: "알로에인, 다당체", pairing: "꿀 (알로에의 찬 성질을 중화하고 보습력 증가)", farmer: "강민석 농부 (제주 푸른농원)", location: "제주특별자치도 제주시 조천읍" },
+            { id: 42, type: "raw", category: "관절", name: "진도 찰보리 홍화씨", tag: "골다공증 #관절보호", imgUrl: getImgUrl("홍화씨"), price: 28000, desc: "뼈를 붙게 하고 튼튼하게 한다는 뼈 건강의 최고봉 홍화씨입니다. 고소하게 볶아 차로 우려드세요.", ingredient: "리놀레산, 칼슘, 백금 성분", pairing: "우슬, 구기자 (연골과 뼈를 동시에 강화)", farmer: "박선영 농부 (진도 해풍농장)", location: "전라남도 진도군 군내면" },
+            { id: 43, type: "raw", category: "순환", name: "영천 볶은 우엉", tag: "독소배출 #혈관건강", imgUrl: getImgUrl("볶은 우엉차"), price: 18000, desc: "사포닌이 풍부하여 혈관 속 콜레스테롤과 노폐물을 배출해주는 영천 우엉입니다. 구수한 맛이 일품!", ingredient: "이눌린, 사포닌", pairing: "연근, 당근 (뿌리 채소 시너지로 해독 작용 탁월)", farmer: "이수찬 농부 (영천 뿌리마을)", location: "경상북도 영천시 청통면" },
+            { id: 44, type: "raw", category: "호흡기", name: "고창 작두콩 (꼬투리)", tag: "비염완화 #호흡기", imgUrl: getImgUrl("작두콩차"), price: 21000, desc: "비염과 축농증에 탁월한 효과가 있는 고창 작두콩. 꼬투리째 썰어 말려 영양분이 그대로 살아있습니다.", ingredient: "히스티딘, 우레아제", pairing: "수세미, 도라지 (코막힘 해소 및 호흡기 염증 완화)", farmer: "김정훈 농부 (풍천 작두콩농장)", location: "전라북도 고창군 아산면" },
+
+            
+            // 추가된 로컬 농산물 10개
+            { id: 101, type: "raw", category: "소화", name: "함양 무농약 양배추", tag: "위염예방 #위장보호", imgUrl: getImgUrl("양배추"), price: 8000, desc: "위 점막을 보호하는 비타민U가 풍부한 함양 고랭지 무농약 양배추입니다. 속쓰림에 탁월합니다.", ingredient: "비타민 U, 비타민 K", pairing: "사과, 브로콜리 (항산화 시너지 극대화)", farmer: "조현민 농부 (지리산 맑은농원)", location: "경상남도 함양군 마천면" },
+            { id: 102, type: "raw", category: "순환", name: "의성 토종 마늘", tag: "면역력 #혈관청소", imgUrl: getImgUrl("의성 마늘"), price: 25000, desc: "알리신 성분이 풍부해 콜레스테롤을 낮추고 피를 맑게 해주는 단단하고 알찬 의성 토종 마늘입니다.", ingredient: "알리신, 스코르디닌", pairing: "돼지고기 (비타민 B1 흡수율 증가)", farmer: "최동석 농부 (의성 황토마늘밭)", location: "경상북도 의성군 의성읍" },
+            { id: 103, type: "raw", category: "피로", name: "철원 생 둥굴레 (옥죽)", tag: "자양강장 #수분보충", imgUrl: getImgUrl("생 둥굴레"), price: 16000, desc: "근육과 뼈를 튼튼하게 하고 쇠약해진 기력을 보충해주는 구수한 철원산 생 둥굴레입니다.", ingredient: "사포닌, 트립토판", pairing: "황기 (만성 피로 회복 및 땀 멎음 효과)", farmer: "이수진 농부 (철원 평야농장)", location: "강원도 철원군 철원읍" },
+            { id: 104, type: "raw", category: "안정", name: "밀양 건조 연근", tag: "불안해소 #스트레스", imgUrl: getImgUrl("건조 연근"), price: 14000, desc: "스트레스로 잠이 오지 않을 때, 마음을 진정시키고 출혈을 멎게 하는 밀양 무농약 연근입니다.", ingredient: "뮤신, 탄닌, 철분", pairing: "대추 (불면증 및 신경 쇠약 완화)", farmer: "김호영 농부 (밀양 연꽃마을)", location: "경상남도 밀양시 부북면" },
+            { id: 105, type: "raw", category: "피부", name: "보성 유기농 녹차 잎", tag: "항산화 #노화방지", imgUrl: getImgUrl("녹차잎 찻잎"), price: 22000, desc: "카테킨 성분이 풍부해 체내 활성산소를 제거하고 피부를 맑게 가꾸어주는 보성 첫물 녹차입니다.", ingredient: "카테킨, 비타민 C", pairing: "레몬 (비타민 흡수율과 항산화 효과 증가)", farmer: "박세리 농부 (보성 다원농장)", location: "전라남도 보성군 보성읍" },
+            { id: 106, type: "raw", category: "호흡기", name: "청송 무농약 사과", tag: "비타민C #기관지보호", imgUrl: getImgUrl("청송 사과"), price: 35000, desc: "폐를 윤택하게 하고 가래를 삭여주는 달콤하고 아삭한 청송 꿀사과입니다.", ingredient: "사과산, 펙틴, 케르세틴", pairing: "당근, 양배추 (아침 쾌변 및 해독 주스로 만점)", farmer: "안재홍 농부 (청송 꿀단지 농원)", location: "경상북도 청송군 주왕산면" },
+            { id: 107, type: "raw", category: "관절", name: "완도 자연산 건다시마", tag: "칼슘 #뼈건강", imgUrl: getImgUrl("건다시마 완도"), price: 12000, desc: "관절 연골을 구성하는 미네랄과 칼슘이 듬뿍 들어간 청정 완도 바다의 두툼한 자연산 다시마입니다.", ingredient: "알긴산, 요오드, 칼슘", pairing: "식초 (해조류의 비린내를 잡고 칼슘 흡수율 증가)", farmer: "윤태호 어부 (완도 해풍영어조합)", location: "전라남도 완도군 신지면" },
+            { id: 108, type: "raw", category: "소화", name: "제주 구좌 당근", tag: "시력보호 #장운동", imgUrl: getImgUrl("제주 당근"), price: 18000, desc: "베타카로틴이 풍부해 위장을 튼튼하게 하고 눈 피로를 덜어주는 달달한 제주 구좌 흙당근입니다.", ingredient: "베타카로틴, 식이섬유", pairing: "올리브유 (지용성 비타민 흡수율 80% 이상 증가)", farmer: "강동원 농부 (제주 바람당근 밭)", location: "제주특별자치도 제주시 구좌읍" },
+            { id: 109, type: "raw", category: "순환", name: "진안 유기농 인동초 (금은화)", tag: "염증완화 #해열작용", imgUrl: getImgUrl("금은화 인동초"), price: 26000, desc: "몸 속 깊은 곳의 염증을 가라앉히고 순환을 막는 열을 식혀주는 진안고원 인동초 꽃입니다.", ingredient: "루테올린, 이노시톨", pairing: "감초 (해독 작용 시너지 및 쓴맛 완화)", farmer: "홍수현 농부 (마이산 약초농원)", location: "전라북도 진안군 마령면" },
+            { id: 110, type: "raw", category: "피로", name: "강진 유기농 찰흑미", tag: "안토시아닌 #피로회복", imgUrl: getImgUrl("찰흑미 검은쌀"), price: 19000, desc: "간 건강을 돕고 밥맛을 쫀득하게 살려주는 블랙푸드! 피로가 쌓인 현대인에게 강력 추천합니다.", ingredient: "안토시아닌, 철분", pairing: "백미, 호두 (영양 균형을 맞춘 건강 밥상)", farmer: "정우성 농부 (강진 찰진들녘)", location: "전라남도 강진군 작천면" },
+
+            // 추가된 제휴 밀키트 및 가공품 10개
+            { id: 201, type: "processed", kitType: "밀키트", category: "소화", name: "사골 육수 양배추 롤 밀키트", tag: "밀키트 #위장보호 #저자극", imgUrl: getImgUrl("양배추 롤 요리"), price: 23000, desc: "소화가 안 되는 날, 푹 끓인 사골 육수에 고기를 감싼 부드러운 양배추 롤을 끓여 드세요. 속이 든든하고 편안해집니다.", ingredient: "함양 양배추, 국내산 다진 돈육, 한우 사골 육수", pairing: "위에 자극이 없도록 짜지 않게 간장 소스만 살짝 곁들이세요.", farmer: "자연의밥상 (밀키트 제휴사)", location: "전라북도 전주시 완산구" },
+            { id: 202, type: "processed", kitType: "가공품", category: "호흡기", name: "무설탕 배도라지 숙성 조청", tag: "건강청 #기침완화", imgUrl: getImgUrl("배도라지 청 조청"), price: 34000, desc: "설탕 한 톨 없이 하동 배와 영주 도라지를 옛 방식 그대로 72시간 푹 고아 만든 수제 조청입니다.", ingredient: "도라지 30%, 배 40%, 쌀엿 30%", pairing: "아침 공복에 한 숟가락 듬뿍 떠서 드시거나 따뜻한 물에 타드세요.", farmer: "바른한약초 (제휴사)", location: "서울특별시 동대문구 약령시" },
+            { id: 203, type: "processed", kitType: "밀키트", category: "피로", name: "흑마늘 표고버섯 영양 솥밥 키트", tag: "밀키트 #면역력강화", imgUrl: getImgUrl("버섯 영양 솥밥"), price: 19000, desc: "밥 짓기 전 톡 털어 넣기만 하세요! 남해 흑마늘과 장흥 표고버섯이 들어가 밥만 먹어도 힘이 나는 영양 만점 솥밥이 완성됩니다.", ingredient: "건표고버섯, 흑마늘 추출액, 단호박 조각", pairing: "달래장을 슥슥 비벼 드시면 잃어버린 입맛을 확실히 되찾아 줍니다.", farmer: "프레시보양 (밀키트 제휴사)", location: "경기도 용인시 기흥구" },
+            { id: 204, type: "processed", kitType: "밀키트", category: "순환", name: "당귀잎 듬뿍! 한방 오리 주물럭", tag: "밀키트 #혈액순환 #보혈", imgUrl: getImgUrl("오리 주물럭 한상"), price: 31000, desc: "향긋한 영천 당귀잎을 듬뿍 얹어 먹는 오리 주물럭! 피를 맑게 하고 순환을 돕는 보혈 작용이 뛰어난 일품요리입니다.", ingredient: "국내산 오리 슬라이스 600g, 생 당귀잎, 특제 고추장 소스", pairing: "마지막에 남은 양념에 참기름과 밥을 볶아 드시면 훌륭합니다.", farmer: "자연의밥상 (밀키트 제휴사)", location: "전라북도 전주시 완산구" },
+            { id: 205, type: "processed", kitType: "가공품", category: "안정", name: "스트레스 아웃! 대추 연근칩 세트", tag: "건강간식 #심신안정", imgUrl: getImgUrl("연근칩 대추칩"), price: 15000, desc: "기름에 튀기지 않고 오븐에 바삭하게 구웠습니다. 바삭바삭 씹으면서 스트레스도 날리고 불면증도 예방하는 건강 영양 간식입니다.", ingredient: "밀양 건연근 50%, 경산 대추 50%", pairing: "따뜻한 우유나 두유와 함께 아이들 간식으로도 아주 좋습니다.", farmer: "참좋은식품 (제휴사)", location: "경기도 성남시 중원구" },
+            { id: 206, type: "processed", kitType: "가공품", category: "피부", name: "알로에 율무 해독 쉐이크 (10포)", tag: "간편식 #이너뷰티", imgUrl: getImgUrl("선식 쉐이크 파우치"), price: 28000, desc: "바쁜 아침 식사 대용으로 훌륭한 쉐이크! 율무가 몸속 붓기를 빼주고 알로에가 장과 피부를 촉촉하게 가꿔줍니다.", ingredient: "국산 율무 분말, 동결건조 알로에 가루, 귀리", pairing: "물이나 아몬드 브리즈에 타서 흔들어 드세요.", farmer: "한방라이프 (제휴사)", location: "인천광역시 부평구" },
+            { id: 207, type: "processed", kitType: "가공품", category: "관절", name: "우슬 홍화씨 앙금 호두과자 (20구)", tag: "건강간식 #뼈건강", imgUrl: getImgUrl("호두과자"), price: 12000, desc: "밀가루 대신 쌀가루와 홍화씨 가루로 반죽하고, 우슬 끓인 물로 앙금을 만든 관절 지킴이 영양 간식입니다.", ingredient: "쌀가루, 홍화씨 분말, 우슬 추출액, 팥 앙금", pairing: "따뜻한 둥굴레차와 곁들이면 어르신들 오후 간식으로 최고입니다.", farmer: "참좋은식품 (제휴사)", location: "경기도 성남시 중원구" },
+            { id: 208, type: "processed", kitType: "한방차", category: "순환", name: "수족냉증 타파! 생강 계피차 (20T)", tag: "한방차 #몸을따뜻하게", imgUrl: getImgUrl("생강 계피차"), price: 18000, desc: "손발이 얼음장처럼 찬 분들을 위한 구세주! 혈관을 확장하고 몸속 깊은 곳부터 후끈하게 덥혀주는 한방 블렌딩 티백입니다.", ingredient: "안동 생강 60%, 베트남산 YB계피 40%", pairing: "꿀을 살짝 타서 주무시기 전에 드시면 수면의 질이 높아집니다.", farmer: "다향한방 (한방차 제휴사)", location: "대구광역시 중구 약령시" },
+            { id: 209, type: "processed", kitType: "밀키트", category: "소화", name: "쓴메밀 발효 장 비빔국수 키트", tag: "밀키트 #장운동 #열내림", imgUrl: getImgUrl("메밀 비빔국수"), price: 16000, desc: "밀가루 제로! 평창 쓴메밀 100% 면에 특허받은 한방 발효 비빔장을 더해 소화가 정말 잘되는 건강 국수입니다.", ingredient: "평창 쓴메밀면, 매실 발효 고추장 소스, 무절임", pairing: "삶은 달걀과 오이를 채 썰어 얹어 드시면 열을 내리는 데 더욱 좋습니다.", farmer: "프레시보양 (밀키트 제휴사)", location: "경기도 용인시 기흥구" },
+            { id: 210, type: "processed", kitType: "밀키트", category: "피로", name: "지리산 자연방사 오골계 백숙", tag: "밀키트 #원기회복 #프리미엄", imgUrl: getImgUrl("오골계 백숙"), price: 58000, desc: "왕실에 진상되던 보양식 중의 보양식! 지리산에서 뛰어놀며 자란 오골계와 12가지 한약재 팩이 모두 들어있는 프리미엄 키트입니다.", ingredient: "지리산 오골계 1마리, 인삼, 황기, 당귀, 대추 등", pairing: "국물 한 방울도 남기지 마시고 찰밥을 말아 죽으로 드셔주세요.", farmer: "자연의밥상 (밀키트 제휴사)", location: "전라북도 전주시 완산구" },
+
+            // 추가된 한방차 키트 & 밀키트
+            { id: 45, type: "processed", kitType: "밀키트", category: "관절", name: "도가니 한방 수육 맑은 전골 밀키트", tag: "밀키트 #관절튼튼 #콜라겐", imgUrl: getImgUrl("도가니 수육 전골"), price: 45000, desc: "한우 도가니와 홍천 우슬 뿌리 육수가 만나 무릎과 관절에 쫀득한 콜라겐을 듬뿍 채워주는 전골 밀키트입니다.", ingredient: "한우 도가니, 우슬뿌리, 대파, 버섯 등", pairing: "동봉된 부추와 들깨가루 소스에 찍어 드시면 맛과 영양이 배가됩니다.", farmer: "프레시보양 (밀키트 제휴사)", location: "경기도 용인시 기흥구" },
+            { id: 46, type: "processed", kitType: "밀키트", category: "피부", name: "율무 듬뿍! 닭안심 미나리 볶음 세트", tag: "밀키트 #노폐물배출 #항산화", imgUrl: getImgUrl("율무 닭고기 요리"), price: 26000, desc: "몸속 습기(부종)를 빼주고 피부를 맑게 하는 율무와 단백질 가득 닭안심, 해독에 좋은 청도 미나리를 조합한 다이어트&피부관리 볶음 세트.", ingredient: "청도 미나리, 국산 율무 가루, 닭안심살", pairing: "매콤한 맛을 원하시면 동봉된 청양고추 소스를 곁들여주세요.", farmer: "자연의밥상 (밀키트 제휴사)", location: "전라북도 전주시 완산구" },
+            { id: 47, type: "processed", kitType: "한방차", category: "순환", name: "붓기 쏙~ 호박 팥차 블렌딩 키트", tag: "한방차 #다이어트 #V라인", imgUrl: getImgUrl("호박팥차 티백"), price: 19000, desc: "안동 늙은 호박과 무안 팥을 최적의 비율로 로스팅하여 티백에 담았습니다. 아침마다 무거운 몸을 가볍게 만들어줍니다.", ingredient: "늙은호박 60%, 볶은 팥 40%", pairing: "찬물에도 잘 우러나며 운동 전후 수분 섭취용으로 훌륭합니다.", farmer: "다향한방 (한방차 제휴사)", location: "대구광역시 중구 약령시" },
+            { id: 48, type: "processed", kitType: "한방차", category: "호흡기", name: "코가 뻥 뚫리는 작두콩 수세미차 세트", tag: "한방차 #만성비염 #환절기", imgUrl: getImgUrl("작두콩 수세미 차"), price: 25000, desc: "고창 작두콩과 진주 수세미를 블렌딩하여 꽉 막힌 코와 답답한 기관지를 시원하게 뚫어주는 환절기 필수 한방차입니다.", ingredient: "작두콩 70%, 수세미 오이 30%", pairing: "건조한 사무실이나 교실에서 텀블러에 담아 수시로 마셔주세요.", farmer: "바른한약초 (한방차 제휴사)", location: "서울특별시 동대문구 약령시" },
+
+            // 한방차 키트 & 제휴 밀키트 (type: 'processed')
+            { id: 29, type: "processed", kitType: "한방차", category: "피로", name: "정통 동의보감 쌍화차 DIY 키트", tag: "쌍화차 #면역력 #감기예방", imgUrl: getImgUrl("쌍화차 한방차 키트"), price: 35000, desc: "당귀, 천궁, 작약, 숙지황 등 9가지 국내산 한약재를 황금 비율로 소분하여 직접 끓여먹는 쌍화차 세트입니다.", ingredient: "백작약, 숙지황, 황기, 당귀, 천궁 등 100% 국산", pairing: "기호에 따라 대추와 잣, 호두를 띄워 드시면 든든한 영양간식이 됩니다.", farmer: "바른한약초 (한방차 제휴사)", location: "서울특별시 동대문구 약령시" },
+            { id: 30, type: "processed", kitType: "밀키트", category: "피로", name: "금산 인삼 듬뿍 한방 삼계탕 밀키트", tag: "밀키트 #보양식 #초간편", imgUrl: getImgUrl("삼계탕 밀키트"), price: 28000, desc: "금산 유기농 수삼과 영계, 비법 한방 육수 팩이 모두 들어있어 냄비에 넣고 끓이기만 하면 되는 보양식 밀키트입니다.", ingredient: "국내산 영계 1마리, 금산 수삼, 황기, 대추 등", pairing: "찹쌀을 따로 불려두었다가 마지막에 넣어 닭죽으로 마무리하세요.", farmer: "프레시보양 (밀키트 제휴사)", location: "경기도 용인시 기흥구" },
+            { id: 31, type: "processed", kitType: "밀키트", category: "소화", name: "참마 가루로 숙성한 오리 주물럭 밀키트", tag: "밀키트 #위장건강 #단백질", imgUrl: getImgUrl("오리 주물럭 밀키트 양념"), price: 32000, desc: "안동 참마 분말로 고기를 숙성해 육질이 부드럽고 소화가 잘되는 프리미엄 오리 주물럭 밀키트입니다. 각종 야채 포함!", ingredient: "국내산 오리고기, 안동 참마 분말, 비법 고추장 소스", pairing: "부추를 듬뿍 넣어 볶으시면 오리고기와 최고의 궁합을 자랑합니다.", farmer: "자연의밥상 (밀키트 제휴사)", location: "전라북도 전주시 완산구" },
+            { id: 32, type: "processed", kitType: "한방차", category: "호흡기", name: "여름철 진액 보충, 생맥산 끓이기 키트", tag: "한방차 #갈증해소 #기력회복", imgUrl: getImgUrl("생맥산 한방차 티백"), price: 22000, desc: "인삼, 맥문동, 오미자를 정통 비율(1:2:1)로 담아 땀을 많이 흘리는 계절에 기력과 진액을 보충해주는 차 키트입니다.", ingredient: "맥문동 50%, 인삼 25%, 오미자 25%", pairing: "끓인 뒤 냉장고에 차갑게 보관하여 물 대신 드시면 갈증 해소에 최고입니다.", farmer: "다향한방 (한방차 제휴사)", location: "대구광역시 중구 약령시" },
+            { id: 33, type: "processed", kitType: "한방차", category: "안정", name: "머리가 맑아지는 총명차 티백 세트", tag: "한방차 #집중력 #수험생", imgUrl: getImgUrl("총명차 티백"), price: 24000, desc: "동의보감 총명탕의 원리를 응용하여 백복령, 원지, 석창포를 먹기 편하게 로스팅한 한방 티백 키트입니다.", ingredient: "석창포, 원지, 백복령", pairing: "카페인이 없으므로 늦은 밤 수험생이나 직장인이 집중할 때 따뜻하게 마시기 좋습니다.", farmer: "바른한약초 (한방차 제휴사)", location: "서울특별시 동대문구 약령시" },
+            { id: 21, type: "processed", category: "소화", name: "속편한 안동 참마죽 (간편식)", tag: "아침대용 #소화불량", imgUrl: getImgUrl("레토르트 죽"), price: 18000, desc: "바쁜 아침, 데우기만 하면 되는 든든하고 속 편한 안동 참마죽입니다.", ingredient: "안동 참마 40%, 국내산 멥쌀", pairing: "동봉된 참깨 고명을 얹어 드시면 고소함이 배가 됩니다.", farmer: "참좋은식품 (제휴사)", location: "경기도 성남시 중원구" },
+            { id: 22, type: "processed", category: "호흡기", name: "소백산 도라지 배즙 스틱 (30포)", tag: "목관리 #휴대용", imgUrl: getImgUrl("도라지 스틱 즙"), price: 35000, desc: "가방에 쏙 들어가는 스틱형! 언제 어디서나 목을 촉촉하게 보호하세요.", ingredient: "도라지 농축액 15%, 배 농축액", pairing: "따뜻한 물 한 컵에 타서 차처럼 드셔도 아주 좋습니다.", farmer: "튼튼제약 (제휴사)", location: "충청북도 청주시 흥덕구" },
+            { id: 24, type: "processed", category: "순환", name: "강화 사자발쑥 뜸팩 & 차 세트", tag: "수족냉증 #휴식", imgUrl: getImgUrl("찜질팩 세트"), price: 42000, desc: "마시는 쑥차와 아랫배를 데워주는 찜질팩이 하나로 구성된 힐링 키트입니다.", ingredient: "100% 강화 사자발쑥 (마시는 용, 뜸 용)", pairing: "주무시기 전 뜸팩을 배에 올리고 쑥차를 드시면 숙면에 좋습니다.", farmer: "한방라이프 (제휴사)", location: "인천광역시 부평구" }
+        ];
+
+        let cartItems = []; 
+        let currentProduct = null;
+        let checkoutItems = []; 
+        let currentStoreType = 'raw'; 
+
+        function formatPrice(price) {
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        
+        function analyzePrompt() {
+            const prompt = document.getElementById('ai-prompt').value;
+            const resultDiv = document.getElementById('ai-result');
+            
+            if (prompt.trim() === '') {
+                alert('증상과 현재 상태를 입력해주세요.');
+                return;
+            }
+            
+            // 시연을 위해 어떤 텍스트가 들어가든 준비된 결과를 보여줌 (실제로는 서버 AI와 통신)
+            resultDiv.style.display = 'block';
+            
+            // 부드러운 스크롤
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function switchStore(type, element) {
+            currentStoreType = type;
+            
+            const tabs = document.querySelectorAll('.store-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+            
+            
+            const filters = document.querySelectorAll('.symptom-item');
+            if (filters.length > 0) {
+                filters.forEach(item => item.classList.remove('active'));
+                filters[0].classList.add('active');
+            }
+
+            
+            renderProducts('all');
+        }
+
+        function renderProducts(filterCategory) {
+            const container = document.getElementById('product-list');
+            container.innerHTML = ''; 
+
+            let targetProducts = products.filter(p => p.type === currentStoreType);
+
+            if (filterCategory !== 'all') {
+                targetProducts = targetProducts.filter(p => p.category === filterCategory);
+            }
+
+            if(targetProducts.length === 0) {
+                container.innerHTML = `<p style="font-size:22px; color:#777; text-align:center; padding: 40px;">해당 분류의 상품이 아직 준비되지 않았습니다.</p>`;
+                return;
+            }
+
+            targetProducts.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.onclick = () => openModal(p);
+                
+                let badgeHtml = '';
+                if(p.type === 'processed') {
+                    if (p.kitType === '한방차') {
+                        badgeHtml = `<div class="badge-kit" style="background-color: #8d6e63;">🍵 한방차 키트</div>`;
+                    } else if (p.kitType === '밀키트') {
+                        badgeHtml = `<div class="badge-kit" style="background-color: #e65100;">🍲 조리용 밀키트</div>`;
+                    } else {
+                        badgeHtml = `<div class="badge-brand">제휴 완제품</div>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    ${badgeHtml}
+                    <div class="card-img">
+                        <img src="${p.imgUrl}" alt="${p.name}">
+                    </div>
+                    <div class="card-content">
+                        <div class="symptom-tag">#${p.tag.replace(/ /g, ' #')}</div>
+                        <h4>${p.name}</h4>
+                        <p>${p.desc}</p>
+                        <button class="btn-buy" onclick="event.stopPropagation(); openModal(${p.id})">자세히 보기</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        
+        function filterBySymptom(category, element) {
+            if(element) {
+                const items = document.querySelectorAll('.symptom-item');
+                items.forEach(item => item.classList.remove('active'));
+                element.classList.add('active');
+            }
+            renderProducts(category);
+        }
+
+        function filterProducts(category, element) {
+            if(element) {
+                const buttons = document.querySelectorAll('.filter-btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                element.classList.add('active');
+            }
+            renderProducts(category);
+        }
+
+        function openModal(productOrId) {
+            const product = typeof productOrId === 'object' 
+                ? productOrId 
+                : products.find(p => p.id === productOrId);
+                
+            currentProduct = product;
+            document.getElementById('modal-quantity').value = 1; 
+
+            document.getElementById('modal-img').src = product.imgUrl;
+            document.getElementById('modal-tag').innerText = '#' + product.tag.replace(/ /g, ' #');
+            document.getElementById('modal-title').innerText = product.name;
+            document.getElementById('modal-price').innerText = formatPrice(product.price) + "원";
+            document.getElementById('modal-desc').innerText = product.desc;
+            
+            if(product.type === 'processed') {
+                document.getElementById('modal-farmer-icon').innerText = '🏢';
+                document.getElementById('modal-farmer-label').innerText = '제조/제휴사';
+                document.getElementById('modal-location-label').innerText = '제조사 위치';
+                document.getElementById('modal-pairing-label').innerText = '맛있게 먹는 꿀팁';
+            } else {
+                document.getElementById('modal-farmer-icon').innerText = '🧑‍🌾';
+                document.getElementById('modal-farmer-label').innerText = '생산자';
+                document.getElementById('modal-location-label').innerText = '산지 위치';
+                document.getElementById('modal-pairing-label').innerText = '음식궁합';
+            }
+
+            document.getElementById('modal-farmer').innerText = product.farmer;
+            document.getElementById('modal-location').innerText = product.location;
+            document.getElementById('modal-ingredient').innerText = product.ingredient;
+            document.getElementById('modal-pairing').innerText = product.pairing;
+
+            document.getElementById('product-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').style.display = 'none';
+        }
+
+        function changeQuantity(amount) {
+            const input = document.getElementById('modal-quantity');
+            let val = parseInt(input.value) + amount;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+
+        function updateCartBadge() {
+            const totalQty = cartItems.reduce((sum, item) => sum + item.qty, 0);
+            document.getElementById('cart-badge-count').innerText = totalQty;
+        }
+
+        function addToCart() {
+            const qty = parseInt(document.getElementById('modal-quantity').value);
+            
+            const existingItem = cartItems.find(item => item.product.id === currentProduct.id);
+            if (existingItem) {
+                existingItem.qty += qty;
+            } else {
+                cartItems.push({ product: currentProduct, qty: qty });
+            }
+            
+            updateCartBadge();
+            closeModal();
+            showToast();
+        }
+        
+        function renderCartList() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            
+            if (cartItems.length === 0) {
+                container.innerHTML = '<p class="empty-cart-msg">장바구니가 비어 있습니다.</p>';
+                document.getElementById('cart-total-price').innerText = "0";
+                document.getElementById('btn-checkout-cart').disabled = true;
+                document.getElementById('btn-checkout-cart').style.backgroundColor = "#ccc";
+                return;
+            }
+
+            document.getElementById('btn-checkout-cart').disabled = false;
+            document.getElementById('btn-checkout-cart').style.backgroundColor = "#f57f17";
+
+            let totalPrice = 0;
+            
+            cartItems.forEach((item, index) => {
+                const subTotal = item.product.price * item.qty;
+                totalPrice += subTotal;
+
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <img src="${item.product.imgUrl}" alt="${item.product.name}">
+                    <div class="cart-item-info">
+                        <h4>${item.product.name}</h4>
+                        <p>${formatPrice(item.product.price)}원 x ${item.qty}개 = <strong>${formatPrice(subTotal)}원</strong></p>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${index})">삭제</button>
+                `;
+                container.appendChild(div);
+            });
+
+            document.getElementById('cart-total-price').innerText = formatPrice(totalPrice);
+        }
+
+        function removeFromCart(index) {
+            cartItems.splice(index, 1);
+            updateCartBadge();
+            renderCartList();
+        }
+
+        function showCart() {
+            closeModal();
+            hideAllSections();
+            document.getElementById('cart-section').style.display = 'block';
+            renderCartList();
+            window.scrollTo(0, 0);
+        }
+
+        function hideAllSections() {
+            document.getElementById('main-section').style.display = 'none';
+            document.getElementById('checkout-section').style.display = 'none';
+            document.getElementById('success-section').style.display = 'none';
+            document.getElementById('cart-section').style.display = 'none';
+        }
+
+        function goHome() {
+            hideAllSections();
+            document.getElementById('main-section').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function buyNowImmediate() {
+            const qty = parseInt(document.getElementById('modal-quantity').value);
+            checkoutItems = [{ product: currentProduct, qty: qty }];
+            closeModal();
+            renderCheckout();
+        }
+
+        function checkoutFromCart() {
+            if(cartItems.length === 0) return;
+            checkoutItems = [...cartItems];
+            renderCheckout();
+        }
+
+        function renderCheckout() {
+            hideAllSections();
+            document.getElementById('checkout-section').style.display = 'block';
+            
+            const listContainer = document.getElementById('checkout-items-list');
+            listContainer.innerHTML = '';
+            
+            let total = 0;
+            checkoutItems.forEach(item => {
+                const subTotal = item.product.price * item.qty;
+                total += subTotal;
+                
+                const div = document.createElement('div');
+                div.className = 'order-summary-item';
+                div.innerHTML = `
+                    <span>${item.product.name} (x${item.qty})</span>
+                    <span>${formatPrice(subTotal)}원</span>
+                `;
+                listContainer.appendChild(div);
+            });
+
+            document.getElementById('checkout-total-price').innerText = formatPrice(total);
+            window.scrollTo(0, 0);
+        }
+
+        function processPayment() {
+            const name = document.getElementById('buyer-name').value;
+            const phone = document.getElementById('buyer-phone').value;
+            const address = document.getElementById('buyer-address').value;
+
+            if (!name || !phone || !address) {
+                alert("주문자 정보와 배송지를 모두 입력해주세요.");
+                return;
+            }
+
+            if (checkoutItems.length === cartItems.length) {
+                cartItems = [];
+                updateCartBadge();
+            }
+
+            hideAllSections();
+            document.getElementById('success-section').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('product-modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        window.onload = () => renderProducts('all');
+
+    </script>
+</body>
+</html>
